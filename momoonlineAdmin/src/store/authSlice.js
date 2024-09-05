@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { STATUSES } from "../globals/misc/Statuses";
-import { API, APIAuthenticated } from "../http";
+import { STATUSES } from "globals/misc/Statuses";
+import { API, APIAuthenticated } from "http";
 
 const authSlice = createSlice({
   name: "auth",
@@ -31,20 +31,6 @@ export const { setUser, setStatus, setToken, logOut } = authSlice.actions;
 
 export default authSlice.reducer;
 
-// slice for user registration
-export function registerUser(data) {
-  return async function registerUserThunk(dispatch) {
-    dispatch(setStatus(STATUSES.LOADING));
-    try {
-      const response = await API.post("/auth/register", data);
-      dispatch(setStatus(STATUSES.SUCCESS));
-    } catch (error) {
-      console.log(error);
-      dispatch(setStatus(STATUSES.ERROR));
-    }
-  };
-}
-
 // slice for user login
 export function loginUser(data) {
   return async function loginUserThunk(dispatch) {
@@ -57,7 +43,7 @@ export function loginUser(data) {
       dispatch(setStatus(STATUSES.SUCCESS));
       if (response.status === 200 && response.data.token) {
         localStorage.setItem("token", response.data.token);
-        window.location.href = "/";
+        window.location.href = "/admin/";
       }
     } catch (error) {
       alert("Something went wrong!");
