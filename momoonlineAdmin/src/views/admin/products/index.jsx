@@ -8,8 +8,8 @@ const Users = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const {products} = useSelector((state)=> state.products)
-    console.log(products, "Hello Products")
-    // const [selectedItem, setSelectedItem] = useState("all")
+    // console.log(products, "Hello Products")
+  
     const [searchTerm, setSearchTerm] = useState("")
     const [date, setDate] = useState("")
     const defaultDate = () => {
@@ -34,17 +34,6 @@ const Users = () => {
                 <div className="flex flex-row mb-1 sm:mb-0">
            
                     <div className="relative">
-                        {/* <select onChange={(e)=> {
-                            setSelectedItem(e.target.value)
-                        }}
-                            className=" appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block  w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-                            <option value='all'>all</option>
-                            <option value='pending'>pending</option>
-                            <option value='delivered'>delivered</option>
-                            <option value='ontheway'>ontheway</option>
-                            <option value='cancelled'>cancelled</option>
-                            <option value='preparing'>preparing</option>
-                        </select> */}
                         <div
                             className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                             <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
