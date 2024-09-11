@@ -1,7 +1,31 @@
+import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import { fetchOrder } from "store/orderSlice"
 
-const MyOrders = () => {
-
+const Orders = () => {
   
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const {orders} = useSelector((state)=> state.orders)
+    // console.log(orders, "Hello")
+    const [selectedItem, setSelectedItem] = useState("all")
+    const [searchTerm, setSearchTerm] = useState("")
+    const [date, setDate] = useState("")
+    const defaultDate = () => {
+        setDate("")
+    }
+    // console.log(date)
+
+    const filteredOrders = orders?.filter((order)=> selectedItem === "all" || order.orderStatus === selectedItem)
+    .filter((order) => order?.paymentDetails?.method.toLowerCase().includes(searchTerm.toLowerCase()) || order?._id?.toLowerCase().includes(searchTerm.toLowerCase()) || order?.totalAmount === searchTerm || order?.paymentDetails?.paymentStatus?.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter((order)=> date === "" || new Date(order?.createdAt).toLocaleDateString() === new Date(date).toLocaleDateString())
+    // console.log(filteredOrders, "zero")
+
+    useEffect(()=>{
+        dispatch(fetchOrder())
+    },[dispatch])
+
   return (
     <>
         <div className='mx-auto max-w-5xl justify-center px-6 py-16 md:flex md:space-x-6 xl:px-0'>
@@ -10,7 +34,9 @@ const MyOrders = () => {
                 <div className="flex flex-row mb-1 sm:mb-0">
            
                     <div className="relative">
-                        <select
+                        <select onChange={(e)=> {
+                            setSelectedItem(e.target.value)
+                        }}
                             className=" appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block  w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
                             <option value='all'>all</option>
                             <option value='pending'>pending</option>
@@ -35,14 +61,22 @@ const MyOrders = () => {
                             </path>
                         </svg>
                     </span>
-                    <input placeholder="Search"
+                    <input value={searchTerm} onChange={(e)=> {
+                        setSearchTerm(e.target.value)
+                    }} placeholder="Search"
                         className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
                 </div>
                 <div className="block relative">
                 
-                    <input placeholder="Search"
+                    <input value={searchTerm} onChange={(e)=> {
+                        setDate(e.target.value)
+                    }} placeholder="Search"
                     type='date'
                         className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
+                        
+                </div>
+                <div className="block relative">
+                <button onClick={defaultDate} type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm mx-4 px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Clear Date</button>
                 </div>
             </div>
             <div>
@@ -74,7 +108,7 @@ const MyOrders = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {/* {
+                                {
                                     filteredOrders && filteredOrders.length > 0 && filteredOrders.map((order)=> {
                                         return(
                                             <tr key={order._id}>
@@ -115,7 +149,7 @@ const MyOrders = () => {
                                             </tr>
                                         )
                                     })
-                                } */}
+                                }
                             </tbody>
                         </table>
                         <div
@@ -144,4 +178,4 @@ const MyOrders = () => {
   )
 }
 
-export default MyOrders
+export default Orders

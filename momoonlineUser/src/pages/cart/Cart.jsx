@@ -20,7 +20,7 @@ const Cart = () => {
         // console.log(productId)
         dispatch(deleteCartItem(productId))
     }
-    const handleCartEmpty = (productId) => {
+    const handleCartEmpty = () => {
         // console.log(productId)
         dispatch(emptyCart())
         navigate("/")
