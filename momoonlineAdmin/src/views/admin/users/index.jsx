@@ -8,7 +8,7 @@ const Users = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const {users} = useSelector((state)=> state.users)
-    console.log(users, "Hello")
+    // console.log(users, "Hello")
     const [searchTerm, setSearchTerm] = useState("")
     const [date, setDate] = useState("")
     const defaultDate = () => {

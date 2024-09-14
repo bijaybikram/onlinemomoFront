@@ -115,7 +115,7 @@ const Orders = () => {
                                                 <td className="px-2 py-5 border-b border-gray-200 bg-white text-sm">
                                                     <div className="flex items-center">
                                                             <div className="ml-3 cursor-pointer">
-                                                                <p onClick={()=> navigate(`/myorders/${order._id}`)} className="text-blue-900 whitespace-no-wrap">
+                                                                <p onClick={()=> navigate(`/admin/orders/${order._id}`)} className="text-blue-900 whitespace-no-wrap">
                                                                     {order._id}
                                                                 </p>
                                                             </div>

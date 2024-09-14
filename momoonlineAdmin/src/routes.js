@@ -20,6 +20,7 @@ import {
   MdLock,
   MdBook,
 } from "react-icons/md";
+import OrderDetails from "views/admin/orders/singleOrder";
 
 const routes = [
   {
@@ -35,6 +36,14 @@ const routes = [
     path: "orders",
     icon: <MdOutlineShoppingCart className="h-6 w-6" />,
     component: <Orders />,
+    secondary: true,
+  },
+  {
+    name: "Orders",
+    layout: "/admin",
+    path: "orders/:id",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <OrderDetails />,
     secondary: true,
   },
   {
