@@ -1,7 +1,8 @@
+// import { APIAuthenticated } from "http"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { fetchOrder } from "store/orderSlice"
+import { fetchOrder, deleteOrder } from "store/orderSlice"
 
 const Orders = () => {
   
@@ -21,6 +22,10 @@ const Orders = () => {
     .filter((order) => order?.paymentDetails?.method.toLowerCase().includes(searchTerm.toLowerCase()) || order?._id?.toLowerCase().includes(searchTerm.toLowerCase()) || order?.totalAmount === searchTerm || order?.paymentDetails?.paymentStatus?.toLowerCase().includes(searchTerm.toLowerCase()))
     .filter((order)=> date === "" || new Date(order?.createdAt).toLocaleDateString() === new Date(date).toLocaleDateString())
     // console.log(filteredOrders, "zero")
+
+    const handleDeleteOrder = (orderId) => {
+        dispatch(deleteOrder(orderId))
+    }
 
     useEffect(()=>{
         dispatch(fetchOrder())
@@ -76,7 +81,7 @@ const Orders = () => {
                         
                 </div>
                 <div className="block relative">
-                <button onClick={defaultDate} type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm mx-4 px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Clear Date</button>
+                <button onClick={defaultDate} type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm mx-4 px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Clear Date</button>
                 </div>
             </div>
             <div>
@@ -104,6 +109,10 @@ const Orders = () => {
                                     <th
                                         className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Order Status
+                                    </th>
+                                    <th
+                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Action
                                     </th>
                                 </tr>
                             </thead>
@@ -145,6 +154,9 @@ const Orders = () => {
                                                         
                                                     <span className="relative">{order?.orderStatus}</span>
                                                     </span>
+                                                </td>
+                                                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <button onClick={()=> handleDeleteOrder(order?._id)} type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Delete</button>
                                                 </td>
                                             </tr>
                                         )

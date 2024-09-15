@@ -15,10 +15,16 @@ const orderSlice = createSlice({
     setOrders(state, action) {
       state.orders = action.payload;
     },
+    deleteOrderById(state, action) {
+      const index = state.orders.findIndex(
+        (order) => order._id === action.payload.orderId
+      );
+      state.orders.splice(index, 1);
+    },
   },
 });
 
-export const { setStatus, setOrders } = orderSlice.actions;
+export const { setStatus, setOrders, deleteOrderById } = orderSlice.actions;
 
 export default orderSlice.reducer;
 
@@ -30,6 +36,24 @@ export function fetchOrder() {
       const response = await APIAuthenticated.get("/admin/orders/");
       //   console.log(response.data);
       dispatch(setOrders(response.data.data));
+      dispatch(setStatus(STATUSES.SUCCESS));
+    } catch (error) {
+      console.log(error);
+      dispatch(setStatus(STATUSES.ERROR));
+    }
+  };
+}
+
+// slice for Order Deletion
+export function deleteOrder(orderId) {
+  return async function deleteOrderThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+    try {
+      const response = await APIAuthenticated.delete(
+        `/admin/orders/${orderId}`
+      );
+      console.log(response);
+      dispatch(deleteOrderById({ orderId }));
       dispatch(setStatus(STATUSES.SUCCESS));
     } catch (error) {
       console.log(error);

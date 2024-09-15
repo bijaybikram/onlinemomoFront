@@ -45,6 +45,7 @@ const routes = [
     icon: <MdOutlineShoppingCart className="h-6 w-6" />,
     component: <OrderDetails />,
     secondary: true,
+    showInNavbar: false,
   },
   {
     name: "Products",

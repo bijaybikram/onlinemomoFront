@@ -16,7 +16,8 @@ export function SidebarLinks(props) {
   };
 
   const createLinks = (routes) => {
-    return routes.map((route, index) => {
+    return routes.filter((route => route.showInNavbar !== false))
+    .map((route, index) => {
       if (
         route.layout === "/admin" ||
         route.layout === "/auth" ||
