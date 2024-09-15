@@ -38,7 +38,7 @@ function App() {
           <Route path="/profile" element={<UserProfile/>} />
           <Route path="/myorders" element={<MyOrders/>} />
           <Route path="/myorders/:id" element={<OrderDetails/>} />
-          <Route path="/admin" element={<ProtectedRoute><AdminDashboard/></ProtectedRoute>} />
+          {/* <Route path="/admin" element={<ProtectedRoute><AdminDashboard/></ProtectedRoute>} /> */}
         </Routes>
         <Footer/>
       </BrowserRouter>
