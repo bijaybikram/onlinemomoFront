@@ -8,36 +8,50 @@ import { APIAuthenticated } from "http"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
+import { updateOrderStatus } from "store/orderSlice"
 import { fetchOrder } from "store/orderSlice"
 
 const OrderDetails = () => {
     const {id} = useParams()
     const navigate = useNavigate()
+    
+    
     const {orders} = useSelector((state)=> state.orders)
-    console.log(orders)
+    // console.log(orders)
     const dispatch = useDispatch()
     const [filteredOrder] = Array.isArray(orders) ? orders.filter((order) => order?._id === id) : []
+ 
+
+    
+    // const handlePaymentChange = (e) => {
+    //     setPaymentStatus(e.target.value)
+    // }
+    // console.log(paymentStatus)
+
+    
+    const handleOrderStatusChange = (e) => {
+
+        dispatch(updateOrderStatus(id, e.target.value))
+    }
+
  
     useEffect(()=>{
         dispatch(fetchOrder())
     },[dispatch])
 
-    const cancelOrder = async () => {
-        try {
-            const response = await APIAuthenticated.patch("/orders/cancel", {id})
-            if(response.status === 200){
-                navigate("/myorders")
-            }
-        console.log(response)
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    // const cancelOrder = async () => {
+    //     try {
+    //         const response = await APIAuthenticated.patch("/orders/cancel", {id})
+    //         if(response.status === 200){
+    //             navigate("/myorders")
+    //         }
+    //     console.log(response)
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
 
     const deleteOrder = async () => {
-
-        console.log(filteredOrder)
-        // const {shippingAddress, items} = filteredOrder
 
         try {
             const response = await APIAuthenticated.delete(`/admin/orders/${id}`)
@@ -67,7 +81,6 @@ const OrderDetails = () => {
                 {
                         filteredOrder && filteredOrder?.items?.length > 0 && filteredOrder.items.map((item)=>
                              {
-                                console.log(item?.totalAmount, "filter")
                             return (
                                 <div key={item?._id} className="mt-4 md:mt-6 flex flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full">
                                 <div className="pb-4 md:pb-8 w-full md:w-40">
@@ -144,27 +157,43 @@ const OrderDetails = () => {
                     </div>
 
                     </div>
-                    <div className="flex w-full justify-center items-center md:justify-start md:items-start">
-                    <>
-                   
-                
-                {
-                    filteredOrder?.orderStatus && filteredOrder?.orderStatus !== "cancelled" && (
-                       <>
-                        <button className="mt-6 md:mt-0 dark:border-white dark:hover:bg-gray-900 dark:bg-transparent  py-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 border border-gray-800 font-medium w-96 2xl:w-full text-base leading-4 text-gray-800" style={{marginTop:'10px'}}>Edit Order</button>
+                    {/* <div className="flex w-full justify-center items-center md:justify-start md:items-start">
 
-                        <button onClick={cancelOrder} className="mt-6 md:mt-0 dark:border-white dark:hover:bg-gray-900 dark:bg-transparent  py-3 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 border border-gray-800 font-medium w-96 2xl:w-full text-base leading-4 text-gray-800" style={{marginTop:'10px'}}>Cancel Order</button>
-                       </>
-                    )
-                }
-                    </>
+                    <label htmlFor="" >Select Payment Status</label>
+                   
+                    <select onChange={handlePaymentChange}
+                            className=" appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block  w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                            <option value='pending'>pending</option>
+                            <option value='paid'>paid</option>
+                        </select>
+               
                 
-                    </div>
+                        </div> */}
+                    <div className="flex w-full justify-center items-center md:justify-start md:items-start">
+
+                    <label htmlFor="" >Select Order Status</label>
+                   
+                    <select onChange={handleOrderStatusChange}
+                            className=" appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block  w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                            <option value='all'>all</option>
+                            <option value='pending'>pending</option>
+                            <option value='delivered'>delivered</option>
+                            <option value='ontheway'>ontheway</option>
+                            <option value='cancelled'>cancelled</option>
+                            <option value='preparing'>preparing</option>
+                        </select>
+               
+                
+                        </div>
+                    {
+                        filteredOrder?.orderStatus && filteredOrder?.orderStatus !== ("pending" || "ontheway" || "preparing") && (
                     
                     <div className="flex w-full justify-center items-center md:justify-start md:items-start">
                     <button onClick={deleteOrder} className="mt-6 md:mt-0 dark:border-white dark:hover:bg-gray-900 dark:bg-transparent  py-3 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 border border-gray-800 font-medium w-96 2xl:w-full text-base leading-4 text-gray-800" style={{marginTop:'10px',backgroundColor:'red',color:'white'}} >Delete Order</button>
         
                     </div>
+                    )
+                }
                 </div>
                 </div>
             </div>

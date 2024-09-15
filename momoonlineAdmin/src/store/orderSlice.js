@@ -15,6 +15,14 @@ const orderSlice = createSlice({
     setOrders(state, action) {
       state.orders = action.payload;
     },
+    updateOrder(state, action) {
+      const index = state.orders.findIndex(
+        (order) => order._id === action.payload.orderId
+      );
+      if (index !== -1) {
+        state.orders[index] = action.payload.data;
+      }
+    },
     deleteOrderById(state, action) {
       const index = state.orders.findIndex(
         (order) => order._id === action.payload.orderId
@@ -24,7 +32,8 @@ const orderSlice = createSlice({
   },
 });
 
-export const { setStatus, setOrders, deleteOrderById } = orderSlice.actions;
+export const { setStatus, setOrders, updateOrder, deleteOrderById } =
+  orderSlice.actions;
 
 export default orderSlice.reducer;
 
@@ -54,6 +63,26 @@ export function deleteOrder(orderId) {
       );
       console.log(response);
       dispatch(deleteOrderById({ orderId }));
+      dispatch(setStatus(STATUSES.SUCCESS));
+    } catch (error) {
+      console.log(error);
+      dispatch(setStatus(STATUSES.ERROR));
+    }
+  };
+}
+
+// slice for Order updation
+export function updateOrderStatus(orderId, orderStatus) {
+  return async function updateOrderStatusThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+
+    try {
+      const response = await APIAuthenticated.patch(
+        `/admin/orders/${orderId}`,
+        { orderStatus }
+      );
+      // console.log(response, "haha");
+      dispatch(updateOrder({ orderId, data: response.data.data }));
       dispatch(setStatus(STATUSES.SUCCESS));
     } catch (error) {
       console.log(error);
