@@ -35,7 +35,7 @@ export function fetchUser() {
     try {
       const response = await APIAuthenticated.get("/admin/users/");
       console.log(response.data);
-      dispatch(setUsers(response.data.data));
+      dispatch(setUsers(response.data.data.reverse()));
       dispatch(setStatus(STATUSES.SUCCESS));
     } catch (error) {
       console.log(error);
