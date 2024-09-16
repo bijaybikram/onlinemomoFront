@@ -15,16 +15,16 @@ const userSlice = createSlice({
     setUsers(state, action) {
       state.users = action.payload;
     },
-    // deleteUser(state, action) {
-    //   const index = state.users.findIndex(
-    //     (user) => user._id === action.payload.userId
-    //   );
-    //   state.users.splice(index, 1);
-    // },
+    deleteUserItem(state, action) {
+      const index = state.users.findIndex(
+        (user) => user._id === action.payload.userId
+      );
+      state.users.splice(index, 1);
+    },
   },
 });
 
-export const { setStatus, setUsers } = userSlice.actions;
+export const { setStatus, setUsers, deleteUserItem } = userSlice.actions;
 
 export default userSlice.reducer;
 
@@ -45,17 +45,17 @@ export function fetchUser() {
 }
 
 // slice for User Deletion
-// export function deleteUserItem(userId) {
-//   return async function deleteUserItemThunk(dispatch) {
-//     dispatch(setStatus(STATUSES.LOADING));
-//     try {
-//       const response = await APIAuthenticated.delete(`/admin/users/${userId}`);
-//       console.log(response.data);
-//       dispatch(deleteUser({ userId }));
-//       dispatch(setStatus(STATUSES.SUCCESS));
-//     } catch (error) {
-//       console.log(error);
-//       dispatch(setStatus(STATUSES.ERROR));
-//     }
-//   };
-// }
+export function deleteUser(userId) {
+  return async function deleteUserThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+    try {
+      const response = await APIAuthenticated.delete(`/admin/users/${userId}`);
+      console.log(response.data);
+      dispatch(deleteUserItem({ userId }));
+      dispatch(setStatus(STATUSES.SUCCESS));
+    } catch (error) {
+      console.log(error);
+      dispatch(setStatus(STATUSES.ERROR));
+    }
+  };
+}

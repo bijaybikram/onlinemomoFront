@@ -19,9 +19,10 @@ const Orders = () => {
     // console.log(date)
 
     const filteredOrders = orders?.filter((order)=> selectedItem === "all" || order.orderStatus === selectedItem)
-    .filter((order) => order?.paymentDetails?.method.toLowerCase().includes(searchTerm.toLowerCase()) || order?._id?.toLowerCase().includes(searchTerm.toLowerCase()) || order?.totalAmount === searchTerm || order?.paymentDetails?.paymentStatus?.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter((order) => order?.paymentDetails?.method.toLowerCase().includes(searchTerm.toLowerCase()) || order?._id?.toLowerCase().includes(searchTerm.toLowerCase()) || order?.totalAmount === searchTerm || order?.paymentDetails?.paymentStatus?.toLowerCase().includes(searchTerm.toLowerCase()) ||  order?.user?.userName?.toLowerCase().includes(searchTerm.toLowerCase()))
     .filter((order)=> date === "" || new Date(order?.createdAt).toLocaleDateString() === new Date(date).toLocaleDateString())
-    // console.log(filteredOrders, "zero")
+    console.log(filteredOrders, "zero")
+
 
     const handleDeleteOrder = (orderId) => {
         dispatch(deleteOrder(orderId))
@@ -96,6 +97,10 @@ const Orders = () => {
                                     </th>
                                     <th
                                         className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Username
+                                    </th>
+                                    <th
+                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Total Amount
                                     </th>
                                     <th
@@ -129,6 +134,9 @@ const Orders = () => {
                                                                 </p>
                                                             </div>
                                                         </div>
+                                                </td>
+                                                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    <p className="text-gray-900 whitespace-no-wrap">{order?.user?.userName}</p>
                                                 </td>
                                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                     <p className="text-gray-900 whitespace-no-wrap">{order.totalAmount}</p>

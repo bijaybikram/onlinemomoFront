@@ -1,14 +1,9 @@
-// import React, { useEffect } from 'react'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { useNavigate, useParams } from 'react-router-dom'
-// import { fetchOrder } from '../../store/checkoutSlice'
-// import { APIAuthenticated } from '../../http'
-
 import { APIAuthenticated } from "http"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { updateOrderStatus } from "store/orderSlice"
+import { updatePaymentStatus } from "store/orderSlice"
 import { fetchOrder } from "store/orderSlice"
 
 const OrderDetails = () => {
@@ -17,39 +12,28 @@ const OrderDetails = () => {
     
     
     const {orders} = useSelector((state)=> state.orders)
-    // console.log(orders)
     const dispatch = useDispatch()
     const [filteredOrder] = Array.isArray(orders) ? orders.filter((order) => order?._id === id) : []
  
-
+    // const [changedPaymentStatus, setChangedPaymentStatus] = useState(filteredOrder?.paymentDetails?.paymentStatus)
     
-    // const handlePaymentChange = (e) => {
-    //     setPaymentStatus(e.target.value)
-    // }
-    // console.log(paymentStatus)
+    const handlePaymentChange = (e) => {
+        // setChangedPaymentStatus(e.target.value)
+        dispatch(updatePaymentStatus(id, e.target.value))
+    }
+    // console.log(changedPaymentStatus)
 
     
     const handleOrderStatusChange = (e) => {
-
         dispatch(updateOrderStatus(id, e.target.value))
     }
+    console.log()
 
  
     useEffect(()=>{
         dispatch(fetchOrder())
     },[dispatch])
 
-    // const cancelOrder = async () => {
-    //     try {
-    //         const response = await APIAuthenticated.patch("/orders/cancel", {id})
-    //         if(response.status === 200){
-    //             navigate("/myorders")
-    //         }
-    //     console.log(response)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
 
     const deleteOrder = async () => {
 
@@ -157,34 +141,36 @@ const OrderDetails = () => {
                     </div>
 
                     </div>
-                    {/* <div className="flex w-full justify-center items-center md:justify-start md:items-start">
+                    <div className="flex w-full justify-center items-center md:justify-start md:items-start">
+                    <div className="flex w-full justify-center items-center md:justify-start md:items-start">
 
                     <label htmlFor="" >Select Payment Status</label>
-                   
+
                     <select onChange={handlePaymentChange}
                             className=" appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block  w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
                             <option value='pending'>pending</option>
                             <option value='paid'>paid</option>
+                            <option value='unpaid'>unpaid</option>
                         </select>
-               
-                
-                        </div> */}
+
+
+                    </div>
                     <div className="flex w-full justify-center items-center md:justify-start md:items-start">
 
                     <label htmlFor="" >Select Order Status</label>
-                   
+
                     <select onChange={handleOrderStatusChange}
-                            className=" appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block  w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-                            <option value='all'>all</option>
-                            <option value='pending'>pending</option>
-                            <option value='delivered'>delivered</option>
-                            <option value='ontheway'>ontheway</option>
-                            <option value='cancelled'>cancelled</option>
-                            <option value='preparing'>preparing</option>
-                        </select>
-               
-                
-                        </div>
+                        className=" appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block  w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500" >
+                        <option value='pending'>pending</option>
+                        <option value='delivered'>delivered</option>
+                        <option value='ontheway'>ontheway</option>
+                        <option value='cancelled'>cancelled</option>
+                        <option value='preparing'>preparing</option>
+                    </select>
+
+
+                    </div>
+                    </div>
                     {
                         filteredOrder?.orderStatus && filteredOrder?.orderStatus !== ("pending" || "ontheway" || "preparing") && (
                     

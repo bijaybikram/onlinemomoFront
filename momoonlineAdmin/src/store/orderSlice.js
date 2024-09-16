@@ -23,6 +23,14 @@ const orderSlice = createSlice({
         state.orders[index] = action.payload.data;
       }
     },
+    updatePaymentStatusById(state, action) {
+      const index = state.orders.findIndex(
+        (order) => order._id === action.payload.orderId
+      );
+      if (index !== -1) {
+        state.orders[index] = action.payload.data;
+      }
+    },
     deleteOrderById(state, action) {
       const index = state.orders.findIndex(
         (order) => order._id === action.payload.orderId
@@ -32,8 +40,13 @@ const orderSlice = createSlice({
   },
 });
 
-export const { setStatus, setOrders, updateOrder, deleteOrderById } =
-  orderSlice.actions;
+export const {
+  setStatus,
+  setOrders,
+  updateOrder,
+  updatePaymentStatusById,
+  deleteOrderById,
+} = orderSlice.actions;
 
 export default orderSlice.reducer;
 
@@ -43,7 +56,6 @@ export function fetchOrder() {
     dispatch(setStatus(STATUSES.LOADING));
     try {
       const response = await APIAuthenticated.get("/admin/orders/");
-      //   console.log(response.data);
       dispatch(setOrders(response.data.data));
       dispatch(setStatus(STATUSES.SUCCESS));
     } catch (error) {
@@ -71,7 +83,7 @@ export function deleteOrder(orderId) {
   };
 }
 
-// slice for Order updation
+// slice for Order Status updation
 export function updateOrderStatus(orderId, orderStatus) {
   return async function updateOrderStatusThunk(dispatch) {
     dispatch(setStatus(STATUSES.LOADING));
@@ -81,8 +93,26 @@ export function updateOrderStatus(orderId, orderStatus) {
         `/admin/orders/${orderId}`,
         { orderStatus }
       );
-      // console.log(response, "haha");
       dispatch(updateOrder({ orderId, data: response.data.data }));
+      dispatch(setStatus(STATUSES.SUCCESS));
+    } catch (error) {
+      console.log(error);
+      dispatch(setStatus(STATUSES.ERROR));
+    }
+  };
+}
+
+// slice for Order Payment Status updation
+export function updatePaymentStatus(orderId, paymentStatus) {
+  return async function updateOrderPaymentStatusThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+
+    try {
+      const response = await APIAuthenticated.patch(
+        `/admin/orders/paymentstatus/${orderId}`,
+        { paymentStatus }
+      );
+      dispatch(updatePaymentStatusById({ orderId, data: response.data.data }));
       dispatch(setStatus(STATUSES.SUCCESS));
     } catch (error) {
       console.log(error);
