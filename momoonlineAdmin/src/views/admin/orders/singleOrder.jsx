@@ -1,5 +1,5 @@
 import { APIAuthenticated } from "http"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { updateOrderStatus } from "store/orderSlice"
@@ -27,7 +27,6 @@ const OrderDetails = () => {
     const handleOrderStatusChange = (e) => {
         dispatch(updateOrderStatus(id, e.target.value))
     }
-    console.log()
 
  
     useEffect(()=>{

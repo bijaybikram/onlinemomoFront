@@ -93,6 +93,7 @@ export function updateOrderStatus(orderId, orderStatus) {
         `/admin/orders/${orderId}`,
         { orderStatus }
       );
+      console.log(response);
       dispatch(updateOrder({ orderId, data: response.data.data }));
       dispatch(setStatus(STATUSES.SUCCESS));
     } catch (error) {

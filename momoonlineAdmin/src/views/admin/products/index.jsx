@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { deleteProduct } from "store/productSlice"
 import { fetchProduct } from "store/productSlice"
 
 const Users = () => {
@@ -21,6 +22,10 @@ const Users = () => {
     .filter((user)=> date === "" || new Date(user?.createdAt).toLocaleDateString() === new Date(date).toLocaleDateString())
 
 
+    const handleDeleteProduct = (productId) => {
+        dispatch(deleteProduct(productId))
+        console.log(productId)
+    }
 
     useEffect(()=>{
         dispatch(fetchProduct())
@@ -95,6 +100,10 @@ const Users = () => {
                                     </th>
                                     <th
                                         className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Product Stock
+                                    </th>
+                                    <th
+                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Action
                                     </th>
                                 </tr>
@@ -137,6 +146,12 @@ const Users = () => {
                                                         
                                                     <span className="relative">{product?.productStatus}</span>
                                                     </span>
+                                                </td>
+                                                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    <p className="text-gray-900 whitespace-no-wrap">{product.productStockQuantity}</p>
+                                                </td>
+                                                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <button onClick={()=> handleDeleteProduct(product?._id)} type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Delete</button>
                                                 </td>
                                             </tr>
                                         )
