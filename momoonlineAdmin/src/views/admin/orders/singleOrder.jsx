@@ -184,10 +184,10 @@ const OrderDetails = () => {
             </div>
 
 
-        <div className="bg-white-50 dark:bg-white-800 w-full xl:w-96 flex justify-between items-center md:items-start px-4 py-2 md:p-1 xl:p-8 flex-col" style={{height:'300px',marginTop:'10px'}}>
+            <div className="bg-white-50 dark:bg-white-800 w-full xl:w-96 flex justify-between items-center md:items-start px-4 py-2 md:p-1 xl:p-8 flex-col" style={{height:'300px',marginTop:'10px'}}>
             </div>
 
-        </div>
+            </div>
             
             </div>
         </div>                               

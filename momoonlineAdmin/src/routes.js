@@ -6,8 +6,6 @@ import Orders from "views/admin/orders";
 import Users from "views/admin/users";
 import Products from "views/admin/products";
 import Reviews from "views/admin/reviews";
-import RTLDefault from "views/rtl/default";
-
 // Auth Imports
 import AdminLogin from "views/auth/SignIn";
 
@@ -21,6 +19,7 @@ import {
   MdBook,
 } from "react-icons/md";
 import OrderDetails from "views/admin/orders/singleOrder";
+import ProductDetails from "views/admin/products/singleProduct";
 
 const routes = [
   {
@@ -55,6 +54,15 @@ const routes = [
     component: <Products />,
   },
   {
+    name: "Products",
+    layout: "/admin",
+    icon: <MdBarChart className="h-6 w-6" />,
+    path: "products/:id",
+    component: <ProductDetails />,
+    secondary: true,
+    showInNavbar: false,
+  },
+  {
     name: "Users",
     layout: "/admin",
     path: "users",
@@ -74,13 +82,6 @@ const routes = [
     path: "sign-in",
     icon: <MdLock className="h-6 w-6" />,
     component: <AdminLogin />,
-  },
-  {
-    name: "RTL Admin",
-    layout: "/rtl",
-    path: "rtl",
-    icon: <MdHome className="h-6 w-6" />,
-    component: <RTLDefault />,
   },
 ];
 export default routes;

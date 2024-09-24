@@ -8,6 +8,7 @@ const productSlice = createSlice({
   initialState: {
     status: STATUSES.LOADING,
     products: null,
+    selectedProduct: {},
   },
   reducers: {
     setProducts(state, action) {
@@ -15,6 +16,22 @@ const productSlice = createSlice({
     },
     setStatus(state, action) {
       state.status = action.payload;
+    },
+    updateProductStatusById(state, action) {
+      const index = state.products.findIndex(
+        (product) => product._id === action.payload.productId
+      );
+      if (index !== -1) {
+        state.products[index] = action.payload.data;
+      }
+    },
+    updateProductStockAndPriceById(state, action) {
+      const index = state.products.findIndex(
+        (product) => product._id === action.payload.productId
+      );
+      if (index !== -1) {
+        state.products[index] = action.payload.data;
+      }
     },
     deleteProductItem(state, action) {
       const index = state.products.findIndex(
@@ -25,8 +42,13 @@ const productSlice = createSlice({
   },
 });
 
-export const { setProducts, setStatus, deleteProductItem } =
-  productSlice.actions;
+export const {
+  setProducts,
+  setStatus,
+  deleteProductItem,
+  updateProductStatusById,
+  updateProductStockAndPriceById,
+} = productSlice.actions;
 
 export default productSlice.reducer;
 
@@ -38,6 +60,52 @@ export function fetchProduct() {
       const response = await API.get("/products");
       //   console.log(response.data.data, "haha");
       dispatch(setProducts(response.data.data.reverse()));
+      dispatch(setStatus(STATUSES.SUCCESS));
+    } catch (error) {
+      console.log(error);
+      dispatch(setStatus(STATUSES.ERROR));
+    }
+  };
+}
+
+// slice for product Status updation
+export function updateProductStatus(productId, productStatus) {
+  return async function updateProductStatusThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+
+    try {
+      const response = await APIAuthenticated.patch(
+        `/products/productstatus/${productId}`,
+        {
+          productStatus,
+        }
+      );
+      console.log(response, "haha");
+      dispatch(
+        updateProductStatusById({ productId, data: response.data.data })
+      );
+      dispatch(setStatus(STATUSES.SUCCESS));
+    } catch (error) {
+      console.log(error);
+      dispatch(setStatus(STATUSES.ERROR));
+    }
+  };
+}
+
+// slice for product stock and price updation
+export function updateProductStockAndPrice(productId, data) {
+  return async function updateProductStockAndPriceThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+
+    try {
+      const response = await APIAuthenticated.patch(
+        `/products/stockprice/${productId}`,
+        data
+      );
+      console.log(response, "haha");
+      dispatch(
+        updateProductStockAndPriceById({ productId, data: response.data.data })
+      );
       dispatch(setStatus(STATUSES.SUCCESS));
     } catch (error) {
       console.log(error);
