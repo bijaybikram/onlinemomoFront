@@ -130,7 +130,7 @@ const ProductDetails = () => {
             </div>
         <div>
         <div className="bg-gray-100 w-full xl:w-96 flex justify-between items-center md:items-start px-4 py-2 md:p-1 xl:p-8 flex-col" style={{height:'300px'}}>
-                <h3 className="text-xl  font-semibold leading-5 text-gray-800">Customer</h3>
+                <h3 className="text-xl  font-semibold leading-5 text-gray-800">Update Product</h3>
                 <div className="flex flex-col md:flex-row xl:flex-col justify-start items-stretch h-full w-full md:space-x-6 lg:space-x-8 xl:space-x-0">
             
                 <div className="flex justify-between xl:h-full items-stretch w-full flex-col mt-6 md:mt-0">
@@ -143,7 +143,6 @@ const ProductDetails = () => {
 
                     </div> */}
                     <div className="flex w-full justify-center items-center md:justify-start md:items-start">
-                    <div className="flex w-full justify-center items-center md:justify-start md:items-start">
 
                     <label htmlFor="" >Select Product Status</label>
 
@@ -153,8 +152,6 @@ const ProductDetails = () => {
                             <option value='unavailable'>unavailable</option>
                         </select>
 
-
-                    </div>
                     </div>
                     {/* <div className="flex w-full justify-center items-center md:justify-start md:items-start"> */}
                     <div>

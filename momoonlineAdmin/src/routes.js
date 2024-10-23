@@ -20,6 +20,7 @@ import {
 } from "react-icons/md";
 import OrderDetails from "views/admin/orders/singleOrder";
 import ProductDetails from "views/admin/products/singleProduct";
+import AddProduct from "views/admin/products/AddProduct";
 
 const routes = [
   {
@@ -61,6 +62,15 @@ const routes = [
     component: <ProductDetails />,
     secondary: true,
     showInNavbar: false,
+  },
+  {
+    name: "Add Products",
+    layout: "/admin",
+    icon: <MdBarChart className="h-6 w-6" />,
+    path: "addproduct",
+    component: <AddProduct />,
+    secondary: true,
+    showInNavbar: true,
   },
   {
     name: "Users",

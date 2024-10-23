@@ -7,7 +7,7 @@ const productSlice = createSlice({
   name: "product",
   initialState: {
     status: STATUSES.LOADING,
-    products: null,
+    products: [],
     selectedProduct: {},
   },
   reducers: {
@@ -39,6 +39,9 @@ const productSlice = createSlice({
       );
       state.products.splice(index, 1);
     },
+    addNewProductItem(state, action) {
+      state.products.push(action.payload);
+    },
   },
 });
 
@@ -48,10 +51,30 @@ export const {
   deleteProductItem,
   updateProductStatusById,
   updateProductStockAndPriceById,
+  addNewProductItem,
 } = productSlice.actions;
 
 export default productSlice.reducer;
 
+// add new product
+export function addNewProduct(data) {
+  return async function addNewProductThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+    try {
+      const response = await APIAuthenticated.post("/products", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      //   console.log(response.data.data, "haha");
+      dispatch(addNewProductItem(response.data.data));
+      dispatch(setStatus(STATUSES.SUCCESS));
+    } catch (error) {
+      console.log(error);
+      dispatch(setStatus(STATUSES.ERROR));
+    }
+  };
+}
 // Fetching all products
 export function fetchProduct() {
   return async function fetchProductThunk(dispatch) {
