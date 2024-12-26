@@ -1,4 +1,4 @@
-// import { APIAuthenticated } from "http"
+import { APIAuthenticated } from "http"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
@@ -36,8 +36,14 @@ const ProductDetails = () => {
     //     dispatch(updateProductStockAndPrice(id, changedStockQty, changedProductPrice))
     // }
 
+    const fetchProductOrders = async () => {
+        const response = await APIAuthenticated.get(`products/productOrders/${id}`)
+        console.log(response, "hahuhua")
+
+    }
  
     useEffect(()=>{
+        fetchProductOrders()
         dispatch(fetchProduct())
     },[dispatch])
 
