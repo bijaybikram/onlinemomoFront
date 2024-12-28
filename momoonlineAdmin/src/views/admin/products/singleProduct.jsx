@@ -1,5 +1,5 @@
 import { APIAuthenticated } from "http"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 import { updateProductStockAndPrice } from "store/productSlice"
@@ -10,10 +10,10 @@ const ProductDetails = () => {
     const {id} = useParams()
         
     const {products} = useSelector((state)=> state.products)
-    console.log(products)
+    const [orders, setOrders] = useState([])
+
     const dispatch = useDispatch()
     const [filteredProduct] = Array.isArray(products) ? products.filter((product) => product?._id === id) : []
-    console.log(filteredProduct)
  
     const handleProductStatusChange = (e) => {
         // setChangedPaymentStatus(e.target.value)
@@ -36,16 +36,21 @@ const ProductDetails = () => {
     //     dispatch(updateProductStockAndPrice(id, changedStockQty, changedProductPrice))
     // }
 
-    const fetchProductOrders = async () => {
-        const response = await APIAuthenticated.get(`products/productOrders/${id}`)
-        console.log(response, "hahuhua")
-
-    }
+    
+    
  
     useEffect(()=>{
+        const fetchProductOrders = async () => {
+            const response = await APIAuthenticated.get(`products/productOrders/${id}`)
+            if(response.status === 200) {
+                setOrders(response.data.data.orders)
+            }
+    
+        }
+
         fetchProductOrders()
         dispatch(fetchProduct())
-    },[dispatch])
+    },[id, dispatch])
 
 
     // const deleteOrder = async () => {
@@ -67,13 +72,13 @@ const ProductDetails = () => {
         <div className="py-24 px-4 md:px-6 2xl:px-20 2xl:container 2xl:mx-auto">
     
             <div className="flex justify-start item-start space-y-5 flex-col">
-            <h1 className="text-1xl dark:text-black lg:text-2xl font-semibold leading-7 lg:leading-9 text-gray-600">Order {filteredProduct?._id}</h1>
+            <h1 className="text-1xl dark:text-black lg:text-2xl font-semibold leading-7 lg:leading-9 text-gray-600">Product {filteredProduct?._id}</h1>
             <p className="text-base dark:text-gray-600 font-medium leading-6 text-gray-600">{new Date(filteredProduct?.createdAt).toLocaleDateString()}</p>
             </div>
             <div className="mt-10 flex flex-col xl:flex-row jusitfy-center items-stretch w-full xl:space-x-8 space-y-4 md:space-y-6 xl:space-y-0">
             <div className="flex flex-col justify-start items-start w-full space-y-4 md:space-y-6 xl:space-y-8">
                 <div className="flex flex-col justify-start items-start bg-gray-100 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
-                <p className="text-lg md:text-xl  font-semibold leading-6 xl:leading-5 text-gray-800">My Order</p>
+                <p className="text-lg md:text-xl  font-semibold leading-6 xl:leading-5 text-gray-800">Product Details</p>
 
                 <div key={filteredProduct?._id} className="mt-4 md:mt-6 flex flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full">
                                 <div className="pb-4 md:pb-8 w-full md:w-40">
@@ -94,60 +99,41 @@ const ProductDetails = () => {
                                 </div>
 
                 </div>
-                {/* <div className="flex justify-center md:flex-row flex-col items-stretch w-full space-y-4 md:space-y-0 md:space-x-6 xl:space-x-8">
-                <div className="flex flex-col px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-100 space-y-6">
-                    <h3 className="text-xl  font-semibold leading-5 text-gray-800">Summary</h3>
-                    <div className="flex justify-center items-center w-full space-y-4 flex-col border-gray-200 border-b pb-4">
 
-                    <div className="flex justify-between items-center w-full">
-                        <p className="text-base  leading-4 text-gray-800">Payment Method</p>
-                        <p className="text-base  leading-4 text-gray-600">{filteredProduct?.paymentDetails?.method}</p>
-                    </div>
-                    <div className="flex justify-between items-center w-full">
-                        <p className="text-base  leading-4 text-gray-800">Payment Status</p>
-                        <p className="text-base  leading-4 text-gray-600">{filteredProduct?.paymentDetails?.paymentStatus}</p>
-                    </div>
-                    <div className="flex justify-between items-center w-full">
-                        <p className="text-base  leading-4 text-gray-800">Order Status</p>
-                        <p className="text-base  leading-4 text-gray-600">{filteredProduct?.orderStatus}</p>
-                    </div>
-                    </div>
-                    <div className="flex justify-between items-center w-full">
-                    <p className="text-base  font-semibold leading-4 text-gray-800">Total</p>
-                    <p className="text-base  font-semibold leading-4 text-gray-600">{filteredProduct?.totalAmount}</p>
-                    </div>
-                </div>
-                <div className="flex flex-col justify-center px-4 py-6 md:p-6 xl:p-8 w-full bg-gray-100 space-y-6">
-                    <h3 className="text-xl  font-semibold leading-5 text-gray-800">Shipping</h3>
-                    <div className="flex justify-between items-start w-full">
-                    <div className="flex justify-center items-center space-x-4">
-                        <div className="w-8 h-8">
-                        <img className="w-full h-full" alt="logo" src="https://i.ibb.co/L8KSdNQ/image-3.png" />
+{/* Order of the product shown below here */}
+                <div className="flex flex-col justify-start items-start bg-gray-100 px-4 py-4 md:py-6 md:p-6 xl:p-8 w-full">
+                <p className="text-lg md:text-xl  font-semibold leading-6 xl:leading-5 text-gray-800">Product Order Details</p>
+
+               {orders.length > 0 && orders.map((order) => {
+                return (
+                    
+                    <div key={order?._id} className="mt-4 md:mt-6 flex flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full">
+                    <div className="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full pb-8 space-y-4 md:space-y-0">
+                        <div className="w-full flex flex-col justify-start items-start space-y-8">
+                        <h3 className="text-sm xl:text-base font-semibold leading-6 text-gray-800">Order Id: {order?._id}</h3>
+
+
                         </div>
-                        <div className="flex flex-col justify-start items-center">
-                        <p className="text-lg leading-6  font-semibold text-gray-800">Delivery Charge<br /><span className="font-normal">Delivery with 24 Hours</span></p>
+                        <div className="flex justify-between space-x-8 items-start w-full">
+                        {/* <p className="text-base  xl:text-lg leading-6"> {filteredProduct?.productDescription}</p> */}
+                        <p className="text-base  xl:text-lg leading-6">Order Status {order?.orderStatus}</p>
+                        <p className="text-base  xl:text-lg leading-6 text-gray-800">Shipping Address: {order?.shippingAddress}</p>
+                        <p className="text-base  xl:text-lg font-semibold leading-6 text-gray-800">Phone No: {order?.phoneNumber}</p>
                         </div>
                     </div>
-                    <p className="text-lg font-semibold leading-6  text-gray-800">Rs 100</p>
-                    </div>
+    </div>
 
+                )
+               })}
                 </div>
-                </div> */}
             </div>
         <div>
+
         <div className="bg-gray-100 w-full xl:w-96 flex justify-between items-center md:items-start px-4 py-2 md:p-1 xl:p-8 flex-col" style={{height:'300px'}}>
                 <h3 className="text-xl  font-semibold leading-5 text-gray-800">Update Product</h3>
                 <div className="flex flex-col md:flex-row xl:flex-col justify-start items-stretch h-full w-full md:space-x-6 lg:space-x-8 xl:space-x-0">
             
                 <div className="flex justify-between xl:h-full items-stretch w-full flex-col mt-6 md:mt-0">
-                    {/* <div className="flex justify-center md:justify-start xl:flex-col flex-col md:space-x-6 lg:space-x-8 xl:space-x-0 space-y-4 xl:space-y-12 md:space-y-0 md:flex-row items-center md:items-start">
-                    <div className="flex justify-center md:justify-start items-center md:items-start flex-col space-y-4 xl:mt-8">
-                        <p className="text-base  font-semibold leading-4 text-center md:text-left text-gray-800">Customer Name : {filteredProduct?.user?.userName}</p>
-                        <p className="text-base  font-semibold leading-4 text-center md:text-left text-gray-800">Address : {filteredProduct?.shippingAddress}</p>
-                        <p className="w-48 lg:w-full  xl:w-48 text-center md:text-left text-sm leading-5 text-gray-600">Phone : {filteredProduct?.phoneNumber} {filteredProduct?.user?.userPhonenumber}</p>
-                    </div>
-
-                    </div> */}
                     <div className="flex w-full justify-center items-center md:justify-start md:items-start">
 
                     <label htmlFor="" >Select Product Status</label>
@@ -159,7 +145,6 @@ const ProductDetails = () => {
                         </select>
 
                     </div>
-                    {/* <div className="flex w-full justify-center items-center md:justify-start md:items-start"> */}
                     <div>
                         <div style={{display: "flex", justifyContent: "space-between" }}>
 
