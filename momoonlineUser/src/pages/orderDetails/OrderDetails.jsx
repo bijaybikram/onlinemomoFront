@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchOrder } from '../../store/checkoutSlice'
 import { APIAuthenticated } from '../../http'
+import QRCode from "react-qr-code";
 
 const OrderDetails = () => {
     const {id} = useParams()
@@ -11,6 +12,7 @@ const OrderDetails = () => {
     console.log(orders)
     const dispatch = useDispatch()
     const [filteredOrder] = Array.isArray(orders) ? orders.filter((order) => order?._id === id) : []
+    const adminOrderPageUrl = `localhost:3001/admin/orders/${id}`
  
     useEffect(()=>{
         dispatch(fetchOrder())
@@ -160,11 +162,19 @@ const OrderDetails = () => {
                     </div>
                 </div>
                 </div>
-            </div>
+        </div>
 
-
-        <div className="bg-white-50 dark:bg-white-800 w-full xl:w-96 flex justify-between items-center md:items-start px-4 py-2 md:p-1 xl:p-8 flex-col" style={{height:'300px',marginTop:'10px'}}>
+        <div className="bg-gray-100 w-full xl:w-96 flex justify-between items-center md:items-start px-4 py-2 md:p-1 xl:p-8 flex-col" style={{height:'250px', marginTop: '10px'}}>
+            <div style={{ height: "auto", margin: "0 auto", maxWidth: 200, width: "100%" }}>
+            <QRCode
+                size={256}
+                style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                value={adminOrderPageUrl}
+                viewBox={`0 0 256 256`}
+            />
             </div>
+        </div>
+
 
         </div>
             

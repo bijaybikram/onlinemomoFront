@@ -16,8 +16,9 @@ import Khaltisuccess from './pages/payment/Khaltisuccess'
 import UserProfile from './pages/profile/UserProfile'
 import MyOrders from './pages/myOrders/MyOrders'
 import OrderDetails from './pages/orderDetails/OrderDetails'
-import ProtectedRoute from './pages/ProtectedRoute'
-import AdminDashboard from './pages/admin/dashboard/AdminDashboard'
+// import ProtectedRoute from './pages/ProtectedRoute'
+// import AdminDashboard from './pages/admin/dashboard/AdminDashboard'
+
 
 function App() {
 
