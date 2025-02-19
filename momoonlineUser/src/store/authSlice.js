@@ -81,3 +81,38 @@ export function fetchProfile() {
     }
   };
 }
+
+// slice for forgot password
+export function forgotPassword(data) {
+  return async function forgotPasswordThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+    try {
+      const response = await APIAuthenticated.post(
+        "/auth/forgotPassword",
+        data
+      );
+      // console.log(response.data.data, "Hello");
+      dispatch(setUser(response.data.data));
+      dispatch(setStatus(STATUSES.SUCCESS));
+    } catch (error) {
+      alert("Something went wrong!");
+      dispatch(setStatus(STATUSES.ERROR));
+    }
+  };
+}
+
+// slice for verify otp
+export function verifyOtp(data) {
+  return async function verifyOtpThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+    try {
+      const response = await APIAuthenticated.post("/auth/verifyOtp", data);
+      console.log("Hello");
+      // dispatch(setUser(response.data.data));
+      dispatch(setStatus(STATUSES.SUCCESS));
+    } catch (error) {
+      alert("Something went wrong!");
+      dispatch(setStatus(STATUSES.ERROR));
+    }
+  };
+}

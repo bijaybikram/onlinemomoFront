@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, setStatus } from '../../../store/authSlice'
 import { STATUSES } from '../../../globals/misc/Statuses'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 const Login = () => {
@@ -91,6 +91,7 @@ const Login = () => {
               <p className='text-red-500 text-sm italic'>{formState.errors.password && formState.errors.password.message}</p>
             </div>
             <button className="bg-gradient-to-b from-gray-700 to-gray-900 font-medium p-2 md:p-4 text-white uppercase w-full">Login</button>
+            <Link to={"/forgotpassword"} style={{color: "blue"}}>Forgot Password?</Link>
           </form>
         </div>
       </div>
