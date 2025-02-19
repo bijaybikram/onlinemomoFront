@@ -8,6 +8,10 @@ const authSlice = createSlice({
     data: [],
     status: STATUSES.LOADING,
     token: "",
+    fpData: {
+      fpEmail: "",
+      fpStatus: STATUSES.LOADING,
+    },
   },
   reducers: {
     setUser(state, action) {
@@ -24,10 +28,17 @@ const authSlice = createSlice({
       state.token = null;
       state.status = STATUSES.SUCCESS;
     },
+    setFpEmail(state, action) {
+      state.fpData.fpEmail = action.payload;
+    },
+    setFpStatus(state, action) {
+      state.fpData.fpStatus = action.payload;
+    },
   },
 });
 
-export const { setUser, setStatus, setToken, logOut } = authSlice.actions;
+export const { setUser, setStatus, setToken, logOut, setFpEmail, setFpStatus } =
+  authSlice.actions;
 
 export default authSlice.reducer;
 
@@ -91,8 +102,8 @@ export function forgotPassword(data) {
         "/auth/forgotPassword",
         data
       );
-      // console.log(response.data.data, "Hello");
-      dispatch(setUser(response.data.data));
+      console.log(response.data.data, "Hello");
+      dispatch(setFpEmail(response.data.data));
       dispatch(setStatus(STATUSES.SUCCESS));
     } catch (error) {
       alert("Something went wrong!");
@@ -107,9 +118,9 @@ export function verifyOtp(data) {
     dispatch(setStatus(STATUSES.LOADING));
     try {
       const response = await APIAuthenticated.post("/auth/verifyOtp", data);
-      console.log("Hello");
-      // dispatch(setUser(response.data.data));
-      dispatch(setStatus(STATUSES.SUCCESS));
+
+      dispatch(setFpEmail(data.email));
+      dispatch(setFpStatus(STATUSES.SUCCESS));
     } catch (error) {
       alert("Something went wrong!");
       dispatch(setStatus(STATUSES.ERROR));

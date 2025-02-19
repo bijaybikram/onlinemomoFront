@@ -7,8 +7,8 @@ import { STATUSES } from '../../../globals/misc/Statuses'
 const ForgotPassword = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
-    const {status, data} = useSelector((state) => state.auth)
-
+    const {status, fpData} = useSelector((state) => state.auth)
+    console.log(fpData)
 
     const dispatch = useDispatch()
     const handleSubmit = (e)=> {

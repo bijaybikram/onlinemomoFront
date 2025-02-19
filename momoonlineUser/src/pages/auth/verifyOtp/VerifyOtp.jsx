@@ -1,32 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { verifyOtp } from '../../../store/authSlice'
 import { STATUSES } from '../../../globals/misc/Statuses'
+import { verifyOtp } from '../../../store/authSlice'
 
 const VerifyOtp = () => {
     const navigate = useNavigate()
     const [otp, setOtp] = useState(null)
-    const {status, data: email} = useSelector((state) => state.auth)
-    // console.log(email)
+    const {fpData} = useSelector((state) => state.auth)
+    console.log(fpData)
     const otpData = {
-        email: email,
-        otp: otp
+        email: fpData.fpEmail,
+        otp: otp,
     }
     const dispatch = useDispatch()
     const handleSubmit = (e)=> {
         e.preventDefault()
         dispatch(verifyOtp(otpData))
-        if(status === STATUSES.SUCCESS){
-            navigate("/resetpassword")
-        }
+        // if(status === STATUSES.SUCCESS){
+        //     navigate("/resetpassword")
+        // }
     }
 
-    // useEffect( ()=> {
-    //     if(status === STATUSES.SUCCESS){
-    //         navigate("/resetpassword")
-    //     }
-    // }, [status])
+    useEffect( ()=> {
+        if(fpData.fpStatus === STATUSES.SUCCESS){
+            navigate("/resetpassword")
+        }
+    }, [fpData.fpStatus])
 
   return (
     <>
