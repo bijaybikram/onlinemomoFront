@@ -37,7 +37,7 @@ export default function Navbar() {
                     <div className="w-full px-6 flex justify-between lg:w-max md:px-0">
                         <a href="/" onClick={()=> navigate("/")} aria-label="logo" className="flex space-x-2 items-center">
                             <img src="https://cdn-icons-png.flaticon.com/512/4151/4151545.png" className="w-12" alt="tailus logo" width="144" height="133"/>
-                            <span className="text-2xl font-bold text-yellow-900">E-<span className="text-yellow-700">Commerce</span></span>
+                            <span className="text-2xl font-bold text-yellow-900">Food-<span className="text-yellow-700">Land</span></span>
                         </a>
 
                         <button aria-label="humburger" id="hamburger" className="relative w-10 h-10 -mr-2 lg:hidden">
@@ -50,15 +50,15 @@ export default function Navbar() {
                         <div className="text-gray-600 lg:pr-4">
                             <ul className="space-y-6 tracking-wide font-medium text-sm md:flex md:space-y-0">
                                 <li>
-                                    <Link to="/profile" className="block md:px-4 transition hover:text-yellow-700">
-    <span>My Profile</span>
-                                    </Link>
+                                    {
+                                        user.length !== 0 && (
+                                        <Link to="/profile" className="block md:px-4 transition hover:text-yellow-700">
+                                            <span>My Profile</span>
+                                        </Link>
+                                        )
+                                    }
                                 </li>
-                                <li>
-                                    <a href="#" className="block md:px-4 transition hover:text-yellow-700">
-    <span>Wishlist</span>
-                                    </a>
-                                </li>
+                                
                                 { items.length !== 0 && (
                                     <li>
                                     <a href="#" onClick={() => navigate("/cart")} className="block md:px-4 transition hover:text-yellow-700">
@@ -79,7 +79,7 @@ export default function Navbar() {
                                         Sign up
                                     </span>
                                     </button>
-                                    <button onClick={()=>navigate("/login")} type="button" title="Start buying" className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max">
+                                    <button onClick={()=>navigate("/login")} style={{marginLeft: "20px"}} type="button" title="Start buying" className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-200 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max">
                                     <span className="block text-yellow-900 font-semibold text-sm">
                                         Login
                                     </span>

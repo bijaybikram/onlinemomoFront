@@ -26,7 +26,7 @@ const authSlice = createSlice({
     logOut(state, action) {
       state.data = [];
       state.token = null;
-      state.status = STATUSES.SUCCESS;
+      state.status = STATUSES.LOADING;
     },
     setFpEmail(state, action) {
       state.fpData.fpEmail = action.payload;
@@ -121,6 +121,25 @@ export function verifyOtp(data) {
 
       dispatch(setFpEmail(data.email));
       dispatch(setFpStatus(STATUSES.SUCCESS));
+    } catch (error) {
+      alert("Something went wrong!");
+      dispatch(setStatus(STATUSES.ERROR));
+    }
+  };
+}
+
+// slice for reset password
+export function resetPassword(data) {
+  return async function resetPasswordThunk(dispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+    try {
+      const response = await APIAuthenticated.post("/auth/resetPassword", data);
+      console.log(response);
+      dispatch(setFpEmail(data.email));
+      dispatch(setFpStatus(STATUSES.SUCCESS));
+      if (response.status === 200) {
+        window.location.href = "/login";
+      }
     } catch (error) {
       alert("Something went wrong!");
       dispatch(setStatus(STATUSES.ERROR));
