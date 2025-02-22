@@ -1,3 +1,4 @@
+import { socket } from "App"
 import { APIAuthenticated } from "http"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -5,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { updateOrderStatus } from "store/orderSlice"
 import { updatePaymentStatus } from "store/orderSlice"
 import { fetchOrder } from "store/orderSlice"
+
 
 const OrderDetails = () => {
     const {id} = useParams()
@@ -25,6 +27,11 @@ const OrderDetails = () => {
 
     
     const handleOrderStatusChange = (e) => {
+        socket.emit("updateOrderStatus", {
+            status: e.target.value,
+            orderId: id,
+            userId: filteredOrder.user._id
+        })
         dispatch(updateOrderStatus(id, e.target.value))
     }
 
