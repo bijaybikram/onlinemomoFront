@@ -19,6 +19,13 @@ import OrderDetails from './pages/orderDetails/OrderDetails'
 import ForgotPassword from './pages/auth/forgotPassword/ForgotPassword'
 import VerifyOtp from './pages/auth/verifyOtp/VerifyOtp'
 import ResetPassword from './pages/auth/resetPassword/ResetPassword'
+import {io} from "socket.io-client"
+export const socket = io("http://localhost:3000", {
+  auth: {
+    token: localStorage.getItem("token")
+  }
+})
+
 // import ProtectedRoute from './pages/ProtectedRoute'
 // import AdminDashboard from './pages/admin/dashboard/AdminDashboard'
 

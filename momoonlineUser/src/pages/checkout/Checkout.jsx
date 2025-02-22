@@ -60,7 +60,6 @@ const Checkout = () => {
 
     useEffect(()=> {
         proceedForPayment()
-        console.log("hello ma nigga")
     },[data, status])
 
     // handle change of payment option

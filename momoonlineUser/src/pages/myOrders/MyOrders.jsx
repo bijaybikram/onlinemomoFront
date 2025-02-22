@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchOrder } from '../../store/checkoutSlice'
+import { fetchOrder, updateOrderStatusInStore } from '../../store/checkoutSlice'
 import { useNavigate } from 'react-router-dom'
+import { socket } from '../../App'
 
 const MyOrders = () => {
 
@@ -12,16 +13,28 @@ const MyOrders = () => {
     const [selectedItem, setSelectedItem] = useState("all")
     const [searchTerm, setSearchTerm] = useState("")
     const [date, setDate] = useState("")
-    console.log(date)
+    // console.log(date)
+
+   
 
     const filteredOrders = orders?.filter((order)=> selectedItem === "all" || order.orderStatus === selectedItem)
     .filter((order) => order?.paymentDetails?.method.toLowerCase().includes(searchTerm.toLowerCase()) || order?._id?.toLowerCase().includes(searchTerm.toLowerCase()) || order?.totalAmount == searchTerm || order?.paymentDetails?.paymentStatus?.toLowerCase().includes(searchTerm.toLowerCase()))
     .filter((order)=> date === "" || new Date(order?.createdAt).toLocaleDateString() === new Date(date).toLocaleDateString())
-    console.log(filteredOrders, "zero")
+    // console.log(filteredOrders, "zero")
 
     useEffect(()=>{
         dispatch(fetchOrder())
+
     },[])
+
+    useEffect(()=>{
+        socket.on("statusUpdated", (data) => {
+            console.log("find Here", data.status, data.orderId)
+            dispatch(updateOrderStatusInStore(data))
+        })
+        
+
+    },[socket])
   return (
     <>
         <div className='mx-auto max-w-5xl justify-center px-6 py-16 md:flex md:space-x-6 xl:px-0'>
